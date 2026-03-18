@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>95% Odam Yiqiladigan Kiber Sinov</title>
+    <!-- Qog'oz va matrix stillarni ulash -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #050505;
+            color: #0f0; 
+            font-family: 'Share Tech Mono', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #0f0;
+            letter-spacing: 2px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .input-box {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #333;
+            color: #0f0;
+            font-family: inherit;
+            font-size: 1.5rem;
+            text-align: center;
+            outline: none;
+            margin-top: 30px;
+            width: 300px;
+            padding: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .input-box:focus { 
+            border-bottom: 2px solid #0f0; 
+            box-shadow: 0 10px 10px -10px #0f0;
+        }
+        
+        .btn-green {
+            background: transparent;
+            border: 2px solid #0f0;
+            color: #0f0;
+            padding: 10px 30px;
+            font-size: 1.2rem;
+            font-family: inherit;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 30px;
+            transition: all 0.3s;
+        }
+        
+        .btn-green:hover {
+            background: #0f0;
+            color: #000;
+        }
+
+        /* ------------------ BOSQICH 0: Ro'yxatdan o'tish ------------------ */
+        #stage0 { display: block; }
+
+        /* ------------------ BOSQICH 1 ------------------ */
+        #stage1 { display: none; }
+        .hidden-hint {
+            color: #050505; 
+            user-select: text;
+            cursor: text;
+            margin: 40px 0;
+        }
+        ::selection { background-color: #0f0; color: #000; }
+
+        /* ------------------ BOSQICH 2 ------------------ */
+        #stage2 { display: none; }
+        .timer-box { margin: 40px 0; }
+        .timer { font-size: 4rem; color: #f00; text-shadow: 0 0 15px #f00; }
+        .typed-text { font-size: 2.5rem; letter-spacing: 15px; color: #fff; height: 50px; margin-top: 20px; }
+
+        /* ------------------ BOSQICH 3 ------------------ */
+        #stage3 { display: none; }
+        .stage3-wrapper { position: relative; display: inline-block; margin-top: 50px; }
+        
+        #victory-btn {
+            background-color: transparent; border: 2px solid #0f0; color: #0f0;
+            padding: 15px 50px; font-size: 1.5rem; font-family: inherit;
+            cursor: pointer; outline: none; text-transform: uppercase; letter-spacing: 5px;
+        }
+        #victory-btn:focus { background-color: #0f0; color: #000; box-shadow: 0 0 30px #0f0; }
+
+        .trap-layer {
+            position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px;
+            z-index: 10; cursor: pointer;
+        }
+
+        /* ------------------ G'ALABA & SERTIFIKAT ------------------ */
+        #victory { display: none; }
+        
+        .certificate-box {
+            position: relative;
+            background: #030303;
+            border: 15px double #0f0;
+            box-shadow: 0 0 50px rgba(0, 255, 0, 0.4);
+            padding: 50px 40px;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+            background-image: radial-gradient(circle, rgba(0,255,0,0.03) 0%, rgba(0,0,0,1) 80%);
+        }
+
+        .cert-header {
+            font-size: 3.5rem;
+            color: #0f0;
+            letter-spacing: 10px;
+            text-shadow: 0 0 15px #0f0;
+            margin-bottom: 20px;
+        }
+
+        .cert-name {
+            font-family: 'Share Tech Mono', sans-serif;
+            font-size: 3rem;
+            color: #fff;
+            text-transform: uppercase;
+            display: inline-block;
+            border-bottom: 2px dashed #0f0;
+            padding: 10px 40px;
+            margin: 30px 0;
+            text-shadow: 0 0 10px #fff;
+        }
+
+        .cert-text {
+            font-size: 1.3rem;
+            color: #ccc;
+            line-height: 2;
+        }
+
+        .cert-footer {
+            margin-top: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding: 0 20px;
+        }
+
+        .signature {
+            border-top: 1px dotted #0f0;
+            padding-top: 10px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #fff;
+        }
+
+        .seal {
+            width: 100px;
+            height: 100px;
+            border: 3px dashed #0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0f0;
+            font-weight: bold;
+            font-size: 1.5rem;
+            transform: rotate(-15deg);
+            box-shadow: inset 0 0 15px #0f0, 0 0 15px #0f0;
+            position: relative;
+        }
+        
+        .seal::after {
+            content: '95%';
+            position: absolute;
+            opacity: 0.2;
+            font-size: 3rem;
+        }
+
+        /* Qizil rang bilan ishlatiladigan GameOver Effect */
+        .glitch { animation: glitch-anim 0.2s infinite; }
+        @keyframes glitch-anim {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 0-BOSQICH: ISM KIRITISH -->
+        <div id="stage0">
+            <h1 style="font-size:3.5rem;">KIBER SINOV</h1>
+            <p style="font-size: 1.5rem; margin-top: 30px;">Tizimga xush kelibsiz. </p>
+            <p>Sizni bu testdan o'ta olmasligingizga 95% ishonchimiz komil.<br> Agar o'tsangiz – Kiber-Mutaxassis Serifikatini qo'lga kiritasiz.</p>
+            
+            <input type="text" id="name-input" class="input-box" placeholder="ISMINGIZNI KIRITING..." autocomplete="off">
+            <br>
+            <button class="btn-green" onclick="startTest()">BO'SHLAMOQ(ENTER)</button>
+        </div>
+
+        <!-- 1-BOSQICH -->
+        <div id="stage1">
+            <h1>1-BOSQICH: ZULMAT</h1>
+            <p>Eshikni ochish uchun maxfiy parolni toping.</p>
+            
+            <!-- Qora fonga qora yozuv -->
+            <p class="hidden-hint">Yaxshi... Parol: TIZIM1337</p>
+            
+            <input type="text" id="pass-input" class="input-box" placeholder="Parol..." autocomplete="off" spellcheck="false">
+        </div>
+
+        <!-- 2-BOSQICH -->
+        <div id="stage2">
+             <h1>2-BOSQICH: TEZLIK REAKTSIYASI</h1>
+             <p>Klaviaturadan ko'rinmas joyga <strong>"HACKER"</strong> sozini xatosiz tering.</p>
+             <p style="color:#f00;">Sizda bor yo'g'i 7 soniya bor.</p>
+            
+            <div class="timer-box">
+                <div class="timer" id="timer-display">07:00</div>
+            </div>
+            <div class="typed-text" id="typed-display"></div>
+        </div>
+
+        <!-- 3-BOSQICH -->
+        <div id="stage3">
+            <h1>3-BOSQICH: ILLUZIYA</h1>
+            <p>Ko'zingiz ko'rgan narsaga ishonmang.</p>
+            <p>G'olib bo'lishingiz uchun quyidagi G'alaba tugmasini bir marta bossangiz bas.</p>
+            
+            <div class="stage3-wrapper">
+                <div class="trap-layer" id="trap"></div> 
+                <button id="victory-btn">G'ALABA</button>
+            </div>
+        </div>
+
+        <!-- G'ALABA EKRANI VA SERTIFIKAT -->
+        <div id="victory">
+            <div class="certificate-box">
+                <h2 class="cert-header">MAXFIY SERTIFIKAT</h2>
+                <div class="cert-text">BU HUJJAT QUYIDAGI INSON TOMONIDAN KIBER-SINOV MUALLAQIYATLI TUGATILGANLIGINI TASDIQLAYDI:</div>
+                
+                <h3 class="cert-name" id="cert-user-name">Foydalanuvchi</h3>
+                
+                <div class="cert-text">USHBU INSON DUNYO AHOLISINING ENG AQLLI 5% QISMIGA KIRISHINI HAMDA <br>MANTIQIY KIBER-TAFAKKUR EgasI Ekanligini Tizim Tasdiqlaydi.</div>
+                
+                <div class="cert-footer">
+                    <div class="seal">OSINT<br>PRO</div>
+                    <div class="signature">Tizim Administratori<br><span style="font-family:'Share Tech Mono'; font-size: 1rem; color:#777;">(Antigravity AI)</span></div>
+                </div>
+            </div>
+            <button class="btn-green" onclick="window.print()">Sertifikatni saqlash / Chop etish</button>
+        </div>
+    </div>
+
+    <script>
+        const stage0 = document.getElementById('stage0');
+        const nameInput = document.getElementById('name-input');
+        
+        const stage1 = document.getElementById('stage1');
+        const passInput = document.getElementById('pass-input');
+        
+        const stage2 = document.getElementById('stage2');
+        const timerDisplay = document.getElementById('timer-display');
+        const typedDisplay = document.getElementById('typed-display');
+        
+        const stage3 = document.getElementById('stage3');
+        const trapLayer = document.getElementById('trap');
+        const victoryBtn = document.getElementById('victory-btn');
+        
+        const victoryScreen = document.getElementById('victory');
+        const certUserName = document.getElementById('cert-user-name');
+
+        let currentStage = 0;
+        let pName = "";
+
+        function gameOver(reason) {
+            document.body.style.backgroundColor = '#500000';
+            setTimeout(() => {
+                alert("YUTQAZDINGIZ: " + reason + "\n\nO'yin boshidan boshlanmoqda...");
+                location.reload();
+            }, 100);
+        }
+
+        // ================= STAGE 0 LOGIC =================
+        function startTest() {
+            pName = nameInput.value.trim();
+            if(pName.length < 2) {
+                alert("Iltimos, ismingizni to'liq kiriting!");
+                return;
+            }
+            certUserName.innerText = pName;
+            
+            stage0.style.display = 'none';
+            stage1.style.display = 'block';
+            currentStage = 1;
+        }
+
+        nameInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') startTest();
+        });
+
+        // ================= STAGE 1 LOGIC =================
+        passInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                if (this.value.toUpperCase() === 'TIZIM1337') {
+                    startStage2();
+                } else {
+                    gameOver("Sirli parol noto'g'ri kiritildi!");
+                }
+            }
+        });
+
+        // ================= STAGE 2 LOGIC =================
+        let stage2Timer;
+        let timeLeft = 7.00;
+        const targetWord = "hacker";
+        let currentTyped = "";
+
+        function startStage2() {
+            currentStage = 2;
+            stage1.style.display = 'none';
+            stage2.style.display = 'block';
+            passInput.blur(); 
+
+            stage2Timer = setInterval(() => {
+                timeLeft -= 0.01;
+                if (timeLeft <= 0) {
+                    clearInterval(stage2Timer);
+                    timerDisplay.innerText = "00:00";
+                    gameOver("Vaqt tugadi! Siz yetarlicha tez emassiz.");
+                } else {
+                    timerDisplay.innerText = "0" + timeLeft.toFixed(2).replace('.', ':');
+                }
+            }, 10);
+
+            document.addEventListener('keydown', handleTyping);
+        }
+
+        function handleTyping(e) {
+            if (currentStage !== 2) return;
+            
+            const key = e.key.toLowerCase();
+            if (key >= 'a' && key <= 'z') {
+                const expectedChar = targetWord[currentTyped.length];
+                
+                if (key === expectedChar) {
+                    currentTyped += key;
+                    typedDisplay.innerText = currentTyped.toUpperCase();
+                    
+                    if (currentTyped === targetWord) {
+                        clearInterval(stage2Timer);
+                        document.removeEventListener('keydown', handleTyping);
+                        startStage3();
+                    }
+                } else {
+                    clearInterval(stage2Timer);
+                    document.removeEventListener('keydown', handleTyping);
+                    gameOver("Noto'g'ri harf! Ketma-ketlik buzildi.");
+                }
+            }
+        }
+
+        // ================= STAGE 3 LOGIC =================
+        function startStage3() {
+            currentStage = 3;
+            stage2.style.display = 'none';
+            stage3.style.display = 'block';
+        }
+
+        trapLayer.addEventListener('click', function() {
+            gameOver("Illuziyaga aldanib qoldingiz!\nSichqoncha – bu kuchsizlarning quroli. Haqiqiy Kiber-mutaxassis klaviaturadan foydalanadi!");
+        });
+
+        victoryBtn.addEventListener('click', function(e) {
+            if(e.detail === 0 || e.pointerId === -1) { 
+                currentStage = 4;
+                stage3.style.display = 'none';
+                victoryScreen.style.display = 'block';
+            } else {
+                gameOver("Illuziya! Sichqoncha orqali bu tugmani bosa olmaysiz.");
+            }
+        });
+
+    </script>
+</body>
+</html>
